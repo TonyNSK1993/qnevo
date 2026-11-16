@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#e8ecef">
+<title>QN-EVO — архитектура ИИ с непрерывным внутренним состоянием | StormCode</title>
+<meta name="description" content="Экспериментальная локальная AI-архитектура QN-EVO: внутреннее состояние агента как динамическая переменная, 160 агентов, 128D-вектор, пять технических отчётов. Демо по запросу.">
+<meta name="keywords" content="QN-EVO, StormCode, внутреннее состояние агента, внутреннее состояние ИИ, непрерывное внутреннее состояние, мультиагентная архитектура, 160 агентов, 128D вектор состояния, архитектура ИИ, новые нейросети 2026, новые нейросети 2027, новые разработки ИИ, новинки ИИ, AI агенты, автономные ИИ агенты, проактивные AI агенты, AI agent internal state, persistent AI agent">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://stormcode.ru/">
+<link rel="alternate" hreflang="ru" href="https://stormcode.ru/">
+<link rel="alternate" hreflang="x-default" href="https://stormcode.ru/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="QN-EVO / StormCode">
+<meta property="og:title" content="QN-EVO — архитектура ИИ с непрерывным внутренним состоянием">
+<meta property="og:description" content="Экспериментальная локальная AI-архитектура: внутреннее состояние как динамическая переменная, 160 агентов, 128D-вектор, технические отчёты.">
+<meta property="og:url" content="https://stormcode.ru/">
+<meta property="og:image" content="https://stormcode.ru/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ru_RU">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="QN-EVO — архитектура ИИ с непрерывным внутренним состоянием">
+<meta name="twitter:description" content="Экспериментальная локальная AI-архитектура: внутреннее состояние как динамическая переменная, 160 агентов, 128D-вектор, технические отчёты.">
+<meta name="twitter:image" content="https://stormcode.ru/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@200;300;400;500;600&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://stormcode.ru/#org",
+      "name": "StormCode",
+      "url": "https://stormcode.ru/",
+      "founder": {
+        "@type": "Person",
+        "name": "Anton Galyamov",
+        "sameAs": ["https://t.me/Tony_nsk"]
+      }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://stormcode.ru/#qn-evo",
+      "name": "QN-EVO",
+      "applicationCategory": "Artificial Intelligence",
+      "operatingSystem": "Local",
+      "description": "Экспериментальная локальная AI-архитектура с непрерывным внутренним состоянием, 160 агентами и 128D-вектором состояния.",
+      "url": "https://stormcode.ru/",
+      "author": { "@id": "https://stormcode.ru/#org" }
+    }
+  ]
+}
+</script>
+
+<style>
+:root{--bg:#e8ecef;--card:#f6f8f9;--bg2:#dce2e8;--ink:#0b1020;--muted:#545c6e;--dim:#8a92a3;--line:rgba(11,16,32,.2);--k:#1536e8;--kl:#9fb0ff;--head:"Geologica","Arial",sans-serif;--sans:"Onest","Arial",sans-serif;--mono:"JetBrains Mono",monospace;--max:1240px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;color:var(--ink);font:16px/1.65 var(--sans);overflow-x:hidden;background:linear-gradient(rgba(11,16,32,.04) 1px,transparent 1px) 0 0/32px 32px,linear-gradient(90deg,rgba(11,16,32,.04) 1px,transparent 1px) 0 0/32px 32px,var(--bg)}
+a{color:inherit;text-decoration:none}button{font:inherit}a:focus-visible,button:focus-visible{outline:2px solid var(--k);outline-offset:3px}
+.wrap{width:min(var(--max),calc(100% - 56px));margin:auto}.mono{font-family:var(--mono)}.muted{color:var(--muted)}
+.header{height:66px;position:sticky;top:0;z-index:50;background:rgba(232,236,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--ink)}
+.nav{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;font:600 15px var(--head);letter-spacing:.02em}
+.brand-mark{width:12px;height:12px;border-radius:50%;background:var(--k);animation:beat 3s infinite}
+@keyframes beat{0%,100%{box-shadow:0 0 0 0 rgba(21,54,232,.45)}50%{box-shadow:0 0 0 9px rgba(21,54,232,0)}}
+.brand small{font:400 11px var(--mono);color:var(--dim)}
+.navlinks{display:flex;gap:26px;font-size:13px}.navlinks a{border-bottom:1px solid transparent;transition:.2s}.navlinks a:hover{border-color:var(--k);color:var(--k)}
+.navright{display:flex;gap:10px;align-items:center}
+.lang{background:transparent;border:1px solid var(--ink);padding:8px 11px;font:500 11px var(--mono);cursor:pointer}.lang:hover{background:var(--ink);color:var(--bg)}
+.nav-cta{font-size:12px;font-weight:600;background:var(--k);color:#fff;padding:10px 15px;transition:.2s}.nav-cta:hover{background:var(--ink)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:88px 0 72px}
+.eyebrow{display:flex;gap:12px;align-items:center;font:500 12px var(--mono);color:var(--k);letter-spacing:.06em}.eyebrow:before{content:"";width:34px;height:1px;background:var(--k)}
+h1{font:300 clamp(54px,7.6vw,112px)/.96 var(--head);letter-spacing:-.045em;margin:26px 0}
+h1 .line2{display:block;color:var(--k);font-weight:500}
+.hero-lead{max-width:540px;font-size:18px;color:var(--muted)}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
+.button{min-height:50px;display:inline-flex;align-items:center;gap:12px;padding:0 22px;border:1px solid var(--ink);font-size:13px;font-weight:600;transition:.2s}
+.button.primary{background:var(--ink);color:var(--bg)}.button.primary:hover{background:var(--k);border-color:var(--k)}.button.secondary:hover{background:var(--ink);color:var(--bg)}
+.hero-foot{display:flex;gap:22px;flex-wrap:wrap;margin-top:34px;font:400 11px var(--mono);color:var(--muted)}.hero-foot span:before{content:"—";color:var(--k);margin-right:8px}
+.scope{background:var(--k);color:#fff}
+.scope-bar{display:flex;justify-content:space-between;gap:10px;padding:11px 16px;font:500 11px var(--mono);border-bottom:1px solid rgba(255,255,255,.25)}
+.scope-screen{height:310px;position:relative;background:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px) 0 0/40px 40px}
+#scope{position:absolute;inset:0;width:100%;height:100%}
+.scope-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:11px 16px;border-top:1px solid rgba(255,255,255,.25)}
+.art-tag{font:400 10px var(--mono);color:#cdd6ff}.art-caption{display:block;padding:0 16px 13px;font:400 10px var(--mono);color:#a9b6ff}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink);background:var(--card)}
+.stat{padding:24px 26px;border-right:1px solid var(--ink)}.stat:last-child{border:0}
+.stat strong{display:block;font:300 clamp(30px,3.4vw,46px)/1 var(--head);letter-spacing:-.04em}
+.stat span{display:block;margin-top:12px;font:400 11px var(--mono);color:var(--muted)}
+.thesis{padding:96px 0 20px}
+.thesis-box{background:var(--k);color:#fff;padding:clamp(28px,5vw,66px);position:relative;overflow:hidden}
+.thesis-box:after{content:"Δ";position:absolute;right:24px;bottom:-120px;font:300 400px/1 var(--head);color:rgba(255,255,255,.08);pointer-events:none}
+.thesis-kicker{font:500 12px var(--mono);letter-spacing:.06em;color:var(--kl);margin-bottom:22px}
+.thesis-quote{font:300 clamp(32px,4.6vw,64px)/1.08 var(--head);letter-spacing:-.04em;margin:0 0 38px;max-width:980px}
+.thesis-quote em{font-style:normal;font-weight:500;background:#fff;color:var(--k);padding:0 .14em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.thesis-sub{font:400 12px var(--mono);color:var(--kl);margin:0 0 14px}
+.thesis-list{display:grid;grid-template-columns:repeat(3,1fr);margin:0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.35);position:relative;z-index:1}
+.thesis-item{padding:22px 24px 4px 0}.thesis-item+.thesis-item{padding-left:24px;border-left:1px solid rgba(255,255,255,.35)}
+.thesis-item b{display:block;font:500 11px var(--mono);color:var(--kl);margin-bottom:10px}.thesis-item p{margin:0;font-size:15px;color:#eef1ff}
+section{padding:108px 0;position:relative}
+.section-top{display:grid;grid-template-columns:.55fr 1.45fr;gap:40px;margin-bottom:52px;border-top:1px solid var(--ink);padding-top:18px}
+.section-index{font:500 12px var(--mono);color:var(--k)}
+.section-title{font:300 clamp(40px,5.2vw,78px)/1 var(--head);letter-spacing:-.045em;margin:0 0 20px}
+.section-desc{max-width:620px;color:var(--muted);margin:0}
+.idea{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink)}
+.idea-quote{background:var(--ink);color:var(--bg);padding:40px;min-height:330px;display:flex;flex-direction:column;justify-content:space-between}
+.quote-mark{font:300 90px/.8 var(--head);color:var(--kl)}
+.idea-quote blockquote{font:300 clamp(26px,3vw,40px)/1.15 var(--head);letter-spacing:-.035em;margin:18px 0;max-width:520px}
+.quote-foot{font:400 11px var(--mono);color:var(--dim)}
+.idea-copy{padding:38px;background:var(--card);display:flex;flex-direction:column;justify-content:center}.idea-copy p{margin:0 0 14px;color:#3a4254}
+.small-note{font:500 11px var(--mono);color:var(--muted);border-top:1px solid var(--ink);padding-top:16px;margin-top:10px}
+.arch-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:24px}
+.architecture-visual{background:var(--ink);min-height:480px;position:relative;padding:22px}
+.arch-svg{width:100%;height:100%;min-height:430px}
+.arch-svg path{stroke:rgba(232,236,239,.3)}.arch-svg rect{fill:var(--ink);stroke:rgba(232,236,239,.5)}.arch-svg rect[width="130"]{stroke:var(--kl);stroke-width:2}
+.arch-svg text{fill:#e8ecef}.arch-svg text[fill="#8cecff"]{fill:var(--kl)}.arch-svg text[fill="#91a4c0"]{fill:#8a92a3}.arch-svg circle{fill:var(--kl)}
+.arch-key{position:absolute;left:24px;bottom:20px;display:flex;gap:14px;flex-wrap:wrap;font:400 10px var(--mono);color:#8a92a3}
+.arch-key span:before{content:"";display:inline-block;width:7px;height:7px;background:var(--kl);margin-right:7px}.arch-key span:nth-child(2):before{background:#e8ecef}.arch-key span:nth-child(3):before{background:transparent;border:1px solid #e8ecef}
+.arch-cards{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ink);background:var(--card)}
+.arch-card{padding:20px;min-height:200px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);transition:.2s}
+.arch-card:nth-child(2n){border-right:0}.arch-card:nth-last-child(-n+2){border-bottom:0}
+.arch-card:hover{background:var(--k);color:#fff}.arch-card:hover p,.arch-card:hover .code{color:#dfe5ff}
+.arch-card .code{font:500 10px var(--mono);color:var(--k)}.arch-card h3{font:500 22px/1.15 var(--head);letter-spacing:-.03em;margin:22px 0 8px}.arch-card p{margin:0;font-size:13px;color:var(--muted)}
+.frontier-box{border:1px solid var(--ink);background:var(--card);padding:clamp(28px,4vw,58px);position:relative;overflow:hidden}
+.frontier-box:after{content:"∞";position:absolute;right:24px;bottom:-120px;font:300 340px/1 var(--head);color:rgba(21,54,232,.08);pointer-events:none}
+.frontier-kicker{font:500 12px var(--mono);color:var(--k);margin-bottom:20px}
+.frontier-lead{font:300 clamp(26px,3vw,42px)/1.15 var(--head);letter-spacing:-.035em;margin:0 0 20px;max-width:900px}
+.frontier-note{color:var(--muted);max-width:760px;margin:0;position:relative;z-index:1}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);background:var(--card)}
+.principle{padding:26px;border-right:1px solid var(--ink)}.principle:last-child{border:0}
+.principle b{font:500 10px var(--mono);color:var(--k)}.principle h3{font:500 22px/1.15 var(--head);letter-spacing:-.03em;margin:16px 0 8px}.principle p{margin:0;font-size:14px;color:var(--muted)}
+.status-panel{border:1px solid var(--ink);background:var(--bg2);padding:26px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+.status-icon{width:44px;height:44px;border:1px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-size:18px}
+.status-panel h3{font:500 22px/1.15 var(--head);letter-spacing:-.03em;margin:0 0 6px}.status-panel p{margin:0;font-size:14px;color:var(--muted);max-width:760px}
+.status-chip{font:500 10px var(--mono);background:var(--ink);color:var(--bg);padding:8px 10px;white-space:nowrap}
+.roadmap{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);margin-top:52px}
+.road-item{padding:26px 22px 0 0;position:relative}.road-item:before{content:"";position:absolute;top:-6px;left:0;width:11px;height:11px;background:var(--k);border-radius:50%}
+.road-item .step{font:400 10px var(--mono);color:var(--dim)}.road-item h3{font:500 20px/1.15 var(--head);letter-spacing:-.03em;margin:14px 0 8px}.road-item p{font-size:13px;color:var(--muted);margin:0}
+.publications{border-top:1px solid var(--ink)}
+.publication{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 8px;border-bottom:1px solid var(--ink);transition:.2s}
+.publication:hover{background:var(--k);color:#fff;padding-left:22px;padding-right:22px}
+.publication .source{font:500 10px var(--mono);color:var(--k)}.publication:hover .source{color:var(--kl)}
+.publication h3{font:300 clamp(22px,2.6vw,34px)/1.15 var(--head);letter-spacing:-.035em;margin:8px 0 0}.publication .out{font-size:28px;flex:none}
+.demo{padding:0 0 108px}
+.demo-box{background:var(--ink);color:var(--bg);padding:clamp(28px,5vw,62px);display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+.demo-box h2{font:300 clamp(38px,5vw,72px)/1 var(--head);letter-spacing:-.045em;margin:12px 0}.demo-box p{max-width:640px;margin:0;color:#b8c0d0}
+.demo-box .eyebrow,.demo-box .micro{color:var(--kl)}.demo-box .eyebrow:before{background:var(--kl)}
+.demo-box .button{border-color:var(--bg)}.demo-box .button.primary{background:var(--k);border-color:var(--k);color:#fff}.demo-box .button.primary:hover{background:#fff;color:var(--ink)}.demo-box .button.secondary:hover{background:var(--bg);color:var(--ink)}
+.demo-actions{display:flex;flex-direction:column;gap:12px;min-width:210px}.demo-actions .button{white-space:nowrap;justify-content:space-between}.telegram-note{font:400 10px var(--mono);color:var(--dim)}
+.author{display:flex;justify-content:space-between;gap:30px;align-items:center;padding:26px 0 60px;border-top:1px solid var(--ink)}
+.author-name{font:500 24px var(--head);letter-spacing:-.03em}.author-desc{font-size:13px;color:var(--muted)}.author-right{font:400 11px var(--mono);text-align:right;color:var(--muted)}
+.footer{background:var(--ink);color:#8a92a3;padding:22px 0 30px;font:400 11px var(--mono)}.footer-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.reports-list{display:flex;flex-direction:column;gap:22px}
+.report{border:1px solid var(--ink);background:var(--card);padding:34px 38px}
+.report-head{display:flex;gap:24px;align-items:flex-start;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--ink)}
+.report-no{font:200 68px/.85 var(--head);color:var(--k);flex:none}
+.report-head h3{font:400 clamp(22px,2.4vw,32px)/1.15 var(--head);letter-spacing:-.035em;margin:0 0 10px;max-width:780px}
+.report-meta{font:400 11px var(--mono);color:var(--muted);margin:0}
+.report h4{font:500 12px var(--mono);color:var(--k);margin:28px 0 12px}
+.report p{color:#3a4254;font-size:15px;margin:0 0 14px}.report ol{margin:0 0 20px;padding-left:22px;color:#3a4254;font-size:15px}.report ol li{margin-bottom:8px}
+.report-table{width:100%;border-collapse:collapse;margin:0 0 22px;font-size:14px}
+.report-table th,.report-table td{padding:10px 14px;border:1px solid var(--ink);text-align:left;vertical-align:top}
+.report-table th{font:500 11px var(--mono);background:var(--ink);color:var(--bg)}.report-table td:last-child{font-family:var(--mono);white-space:nowrap}
+.report code{font:12px var(--mono);background:rgba(21,54,232,.1);color:var(--k);padding:2px 6px}
+.report-code{font:12px/1.7 var(--mono);color:#dfe5ff;background:var(--ink);border-left:4px solid var(--k);padding:14px 16px;margin:0 0 16px;overflow-x:auto;white-space:pre}
+.report-formula{font:500 16px var(--mono);background:rgba(21,54,232,.08);border:1px solid var(--k);color:var(--k);padding:12px 16px;margin:0 0 14px}
+.report-callout{border:1px solid var(--ink);border-left:6px solid var(--k);background:var(--bg2);padding:16px 20px;margin-top:6px}
+.report-callout b{display:block;font:500 11px var(--mono);color:var(--k);margin-bottom:8px}.report-callout p{margin:0;font-size:14px}
+@media(max-width:940px){.navlinks{display:none}.hero{grid-template-columns:1fr;padding-top:50px}.section-top{grid-template-columns:1fr;gap:10px}.arch-layout,.idea{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--ink)}.demo-box{grid-template-columns:1fr}.demo-actions{flex-direction:row;flex-wrap:wrap}.thesis-list{grid-template-columns:1fr}.thesis-item+.thesis-item{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.35)}.roadmap{grid-template-columns:1fr 1fr;row-gap:28px}.principles{grid-template-columns:1fr}.principle{border-right:0;border-bottom:1px solid var(--ink)}.principle:last-child{border-bottom:0}}
+@media(max-width:620px){.wrap{width:calc(100% - 32px)}.nav-cta{display:none}section{padding:72px 0}.status-panel{grid-template-columns:auto 1fr}.status-chip{grid-column:2;justify-self:start}.report{padding:22px 18px}.report-head{gap:14px}.report-no{font-size:46px}.report-table td:last-child{white-space:normal}.author{flex-direction:column;align-items:flex-start}.author-right{text-align:left}.footer-row{flex-direction:column}.scope-screen{height:220px}.architecture-visual{min-height:330px;padding:8px}.arch-svg{min-height:320px}.arch-key{left:12px;bottom:10px}.publication h3{font-size:21px}.hero-foot{flex-direction:column;gap:8px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+/* ===== эффекты первого блока ===== */
+.hero:before{content:"";position:absolute;inset:-70px -28px;pointer-events:none;background:radial-gradient(520px circle at var(--mx,72%) var(--my,40%),rgba(21,54,232,.13),transparent 62%)}
+.hero>*{position:relative}
+@keyframes rise{from{opacity:0;transform:translateY(42px)}}
+@keyframes open{from{clip-path:inset(0 100% 0 0)}}
+@keyframes scan{to{left:100%}}
+h1>span{display:block;animation:rise 1s cubic-bezier(.2,.8,.2,1) .1s both}h1 .line2{animation-delay:.28s}
+.eyebrow{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.hero-lead{animation:rise .9s cubic-bezier(.2,.8,.2,1) .5s both}.hero-actions{animation:rise .9s cubic-bezier(.2,.8,.2,1) .65s both}.hero-foot{animation:rise .9s cubic-bezier(.2,.8,.2,1) .8s both}
+.hero-art{perspective:1200px}
+.scope{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;box-shadow:0 40px 90px -30px rgba(21,54,232,.65);animation:open 1.3s .3s cubic-bezier(.7,0,.2,1) both}
+.scope-bar b{font-weight:500;display:inline-block;min-width:6ch}
+.scope-screen{overflow:hidden;cursor:crosshair}
+.scope-screen:after{content:"";position:absolute;top:0;bottom:0;left:-100px;width:100px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.16));animation:scan 6s linear infinite}
+.hint{position:absolute;left:14px;bottom:12px;font:400 10px var(--mono);color:#cdd6ff;pointer-events:none;transition:opacity .5s;animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.35}}
+</style>
+</head>
+<body>
+
+
+<header class="header"><div class="wrap nav">
+<a class="brand" href="#top"><span class="brand-mark"></span><span>QN-EVO <small>/ STORMCODE</small></span></a>
+<nav class="navlinks"><a href="#thesis" data-t="navThesis">Тезис</a><a href="#idea" data-t="navIdea">Идея</a><a href="#architecture" data-t="navArchitecture">Архитектура</a><a href="#research" data-t="navResearch">Исследования</a><a href="#frontier" data-t="navFrontier">Фронтир</a><a href="#publications" data-t="navPublications">Публикации</a><a href="#reports">Отчёты</a></nav>
+<div class="navright"><a class="nav-cta" href="https://t.me/Tony_nsk" target="_blank" rel="noopener" data-t="navDemo">ЗАПРОСИТЬ ДЕМО ↗</a><button class="lang" id="lang">EN / RU</button></div>
+</div></header>
+<main id="top">
+<div class="wrap hero">
+<div class="hero-copy">
+<div class="eyebrow" data-t="eyebrow">INDEPENDENT AI RESEARCH · EXPERIMENTAL SYSTEM</div>
+<h1><span data-t="heroA">What happens</span><br><span data-t="heroB" class="line2">when AI is silent?</span></h1>
+<p class="hero-lead" data-t="heroLead">QN-EVO исследует другой взгляд на архитектуру ИИ: не только генерацию ответа, но и процессы, которые продолжаются внутри системы между запросами.</p>
+<div class="hero-actions"><a class="button primary" href="#thesis"><span data-t="exploreThesis">ГЛАВНЫЙ ТЕЗИС</span> <span>↗</span></a><a class="button secondary" href="https://t.me/Tony_nsk" target="_blank" rel="noopener"><span data-t="request">ЗАПРОСИТЬ ДЕМОНСТРАЦИЮ</span> <span>↗</span></a></div>
+<div class="hero-foot"><span data-t="local">LOCAL-FIRST DEVELOPMENT</span><span data-t="notOnline">NOT PUBLICLY DEPLOYED</span><span>STORMCODE · 2026</span></div>
+</div>
+<div class="hero-art" aria-label="Иллюстрация: осциллограмма внутреннего состояния в паузе между запросами">
+<div class="scope"><div class="scope-bar"><span>CH.01 · STATE NORM <b id="nrm">0.0060</b></span><span>SILENCE <b id="sil">00:00:00</b></span></div>
+<div class="scope-screen"><canvas id="scope"></canvas><span class="hint" id="hint">click → pulse</span></div>
+<div class="scope-foot"><span class="art-tag" data-t="artTagA">PERSISTENT STATE / 01</span><span class="art-tag" data-t="artTagB">AGENT DYNAMICS / 160</span><span class="art-tag" data-t="artTagC">VITALIS · CORE RHYTHM</span></div>
+<span class="art-caption" data-t="artCaption">CONCEPTUAL SYSTEM VISUALIZATION</span></div>
+</div>
+</div>
+<div class="wrap"><div class="stats">
+<div class="stat"><strong>160</strong><span data-t="stat1">Agent slots in the evolving architecture</span></div>
+<div class="stat"><strong>128D</strong><span data-t="stat2">Internal state representation</span></div>
+<div class="stat"><strong>LOCAL</strong><span data-t="stat3">Execution and experimentation</span></div>
+<div class="stat"><strong>ON REQUEST</strong><span data-t="stat4">Private project demonstration</span></div>
+</div></div>
+
+<!-- ===================== THESIS ===================== -->
+<section class="thesis" id="thesis"><div class="wrap">
+<div class="thesis-box">
+<div class="thesis-kicker">THE THESIS</div>
+<h2 class="thesis-quote" data-t="thesisQuote">Внутреннее состояние искусственного агента может быть <em>самостоятельной динамической переменной</em>.</h2>
+<p class="thesis-sub" data-t="thesisSub">Мы доказали, что:</p>
+<ul class="thesis-list">
+<li class="thesis-item"><b>01 / GOVERNING VARIABLE</b><p data-t="thesis1">Внутреннее состояние — это не побочный эффект, а управляющая переменная.</p></li>
+<li class="thesis-item"><b>02 / DYNAMICS</b><p data-t="thesis2">Оно обладает инерцией, памятью, реактивностью и способностью к самоорганизации.</p></li>
+<li class="thesis-item"><b>03 / INITIATIVE</b><p data-t="thesis3">Система способна генерировать поведение (инициативу), исходя из внутренней динамики, а не только из внешних промптов.</p></li>
+</ul>
+</div>
+</div></section>
+
+<section id="idea"><div class="wrap">
+<div class="section-top"><div class="section-index" data-t="secIndex1">01 — ВОПРОС</div><div><h2 class="section-title" data-t="ideaTitle">An AI system is more<br>than its next response.</h2><p class="section-desc" data-t="ideaDesc">Большинство привычных интерфейсов ИИ показывают нам только момент взаимодействия. QN-EVO исследует, что может происходить в самой системе за пределами этого момента.</p></div></div>
+<div class="idea">
+<div class="idea-quote"><span class="quote-mark">“</span><blockquote data-t="quote">What if an AI system could maintain an evolving internal state between our interactions?</blockquote><span class="quote-foot">QN-EVO / RESEARCH QUESTION</span></div>
+<div class="idea-copy"><p data-t="ideaP">QN-EVO — экспериментальная локальная архитектура, объединяющая специализированных агентов, модель внутреннего состояния, память и управляющие сигналы. Её задача — исследовать инженерные механизмы непрерывной работы и инициативного поведения.</p><p data-t="ideaP2">Проект не заявляет, что сознание машины доказано. Здесь важны архитектура, наблюдаемая динамика, проверяемые гипотезы и честное описание ограничений.</p><div class="small-note">RESEARCH FIRST · MEASUREMENTS OVER CLAIMS · LOCAL CONTROL</div></div>
+</div>
+</div></section>
+
+<section class="arch-section" id="architecture"><div class="wrap">
+<div class="section-top"><div class="section-index" data-t="secIndex2">02 — АРХИТЕКТУРА</div><div><h2 class="section-title" data-t="archTitle">A coordinated<br>internal architecture.</h2><p class="section-desc" data-t="archDesc">QN-EVO развивается как набор взаимосвязанных подсистем. Схема показывает концептуальные отношения между ключевыми компонентами, а не исчерпывающую карту всех реализованных модулей.</p></div></div>
+<div class="arch-layout">
+<div class="architecture-visual">
+<svg class="arch-svg" viewBox="0 0 600 470" role="img" aria-label="QN-EVO conceptual architecture diagram">
+<defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#8cecff"/><stop offset="1" stop-color="#a58cff"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<g fill="none" stroke="rgba(130,174,231,.25)" stroke-width="1.2">
+<path d="M300 225 L115 92 M300 225 L300 60 M300 225 L485 92 M300 225 L115 365 M300 225 L300 410 M300 225 L485 365"/>
+<path d="M115 92 L300 60 L485 92 L485 365 L300 410 L115 365 Z" stroke-dasharray="4 7" opacity=".6"/>
+<path d="M115 92 Q205 145 300 225 M485 92 Q390 145 300 225 M115 365 Q205 300 300 225 M485 365 Q390 300 300 225" opacity=".5"/>
+</g>
+<g fill="#0e1a2b" stroke="#6b9be4" stroke-width="1.2">
+<rect x="235" y="180" width="130" height="90" rx="12" stroke="url(#g)" stroke-width="1.8"/>
+<rect x="55" y="55" width="120" height="72" rx="9"/><rect x="240" y="25" width="120" height="72" rx="9"/><rect x="425" y="55" width="120" height="72" rx="9"/><rect x="55" y="330" width="120" height="72" rx="9"/><rect x="240" y="375" width="120" height="72" rx="9"/><rect x="425" y="330" width="120" height="72" rx="9"/>
+</g>
+<g fill="#dceeff" font-family="DM Mono,monospace" text-anchor="middle">
+<text x="300" y="217" font-size="13" font-weight="500">QN-EVO</text><text x="300" y="238" font-size="9" fill="#8cecff">SYSTEM CORE</text>
+<text x="115" y="84" font-size="11">AGENTS</text><text x="115" y="101" font-size="8" fill="#91a4c0">COORDINATION</text>
+<text x="300" y="54" font-size="11">VITALIS</text><text x="300" y="71" font-size="8" fill="#91a4c0">SYSTEM RHYTHM</text>
+<text x="485" y="84" font-size="11">STATE</text><text x="485" y="101" font-size="8" fill="#91a4c0">128D MODEL</text>
+<text x="115" y="359" font-size="11">MEMORY</text><text x="115" y="376" font-size="8" fill="#91a4c0">ENGRAM / CONTEXT</text>
+<text x="300" y="404" font-size="11">STEERING</text><text x="300" y="421" font-size="8" fill="#91a4c0">MODEL SIGNALS</text>
+<text x="485" y="359" font-size="11">OBSERVE</text><text x="485" y="376" font-size="8" fill="#91a4c0">LOGS / METRICS</text>
+</g>
+<circle cx="300" cy="225" r="7" fill="#bdf5ff" filter="url(#glow)"/>
+<g fill="#8cecff"><circle cx="115" cy="92" r="3"/><circle cx="300" cy="60" r="3"/><circle cx="485" cy="92" r="3"/><circle cx="115" cy="365" r="3"/><circle cx="300" cy="410" r="3"/><circle cx="485" cy="365" r="3"/></g>
+</svg>
+<div class="arch-key"><span>CONTROL</span><span>INTERNAL STATE</span><span>OBSERVABILITY</span></div>
+</div>
+<div class="arch-cards">
+<article class="arch-card"><span class="code">01 / VITALIS</span><h3>Vitalis</h3><p data-t="vitalis">Центральный контур системного ритма и состояния, связывающий динамику компонентов в общий контекст.</p></article>
+<article class="arch-card"><span class="code">02 / AGENT SWARM</span><h3 data-t="agents">Агентная координация</h3><p data-t="agentsP">Специализированные агенты обрабатывают сигналы и формируют управляющие воздействия для системы.</p></article>
+<article class="arch-card"><span class="code">03 / STATE VECTOR</span><h3 data-t="state">Внутреннее состояние</h3><p data-t="stateP">Компактное представление параметров позволяет наблюдать изменения внутренней динамики.</p></article>
+<article class="arch-card"><span class="code">04 / QN-ENGRAM</span><h3 data-t="memory">Память и непрерывность</h3><p data-t="memoryP">Исследуются сохранение событий, реактивация контекста и связь состояний во времени.</p></article>
+<article class="arch-card"><span class="code">05 / STEERING</span><h3 data-t="steering">Управляющие сигналы</h3><p data-t="steeringP">Эксперименты с воздействием внутренних сигналов на генерацию локальной модели.</p></article>
+<article class="arch-card"><span class="code">06 / OBSERVATORY</span><h3 data-t="observability">Наблюдаемость</h3><p data-t="observabilityP">Метрики, логи и инструменты проверки превращают гипотезы в исследуемые результаты.</p></article>
+</div>
+</div>
+</div></section>
+
+<section id="research"><div class="wrap">
+<div class="section-top"><div class="section-index" data-t="secIndex3">03 — СТАТУС ИССЛЕДОВАНИЙ</div><div><h2 class="section-title" data-t="researchTitle">Open about what<br>is — and isn't — ready.</h2><p class="section-desc" data-t="researchDesc">Проект находится в активной локальной разработке. Мы разделяем исследовательские направления, реализованные компоненты и то, что ещё требует проверки.</p></div></div>
+<div class="status-panel"><div class="status-icon">◇</div><div><h3 data-t="statusTitle">QN-EVO is not publicly deployed</h3><p data-t="statusText">Работающая система запускается локально. Публичного облачного экземпляра, открытого API или постоянной онлайн-демонстрации сейчас нет. Это позволяет сохранять вычислительные ресурсы для разработки и экспериментов.</p></div><div class="status-chip" data-t="statusBadge">LOCAL / EXPERIMENTAL</div></div>
+<div class="principles" style="margin-top:18px">
+<div class="principle"><b>01 / TRANSPARENCY</b><h3 data-t="p1h">Чёткие границы</h3><p data-t="p1p">Экспериментальная архитектура не выдаётся за доказанное сознание или готовый продукт.</p></div>
+<div class="principle"><b>02 / EVIDENCE</b><h3 data-t="p2h">Измерения важнее лозунгов</h3><p data-t="p2p">Результаты должны сопровождаться условиями эксперимента, метриками и ограничениями.</p></div>
+<div class="principle"><b>03 / LOCAL-FIRST</b><h3 data-t="p3h">Локальная разработка</h3><p data-t="p3p">Вычислительная система остаётся под контролем разработчика и не требует публичного облака.</p></div>
+</div>
+<div class="roadmap">
+<div class="road-item"><span class="step">RESEARCH AREA 01</span><h3 data-t="road1h">Self-model & state</h3><p data-t="road1p">Представление и отслеживание внутренних параметров системы.</p></div>
+<div class="road-item"><span class="step">RESEARCH AREA 02</span><h3 data-t="road2h">Agency & coordination</h3><p data-t="road2p">Развитие агентов, маршрутизации и механизмов инициативы.</p></div>
+<div class="road-item"><span class="step">RESEARCH AREA 03</span><h3 data-t="road3h">Continuity & memory</h3><p data-t="road3p">Память, реактивация и временная связность событий.</p></div>
+<div class="road-item"><span class="step">RESEARCH AREA 04</span><h3 data-t="road4h">Reproducible tests</h3><p data-t="road4p">Публикация методик, измерений и воспроизводимых наблюдений.</p></div>
+</div>
+</div></section>
+
+<!-- ===================== 04 — ENGINEERING FRONTIER ===================== -->
+<section class="frontier" id="frontier"><div class="wrap">
+<div class="section-top">
+  <div class="section-index" data-t="secIndex4">04 — ИНЖЕНЕРНЫЙ ФРОНТИР</div>
+  <div>
+    <h2 class="section-title" data-t="frontierTitle">Новое направление<br>в инженерии ИИ.</h2>
+    <p class="section-desc" data-t="frontierDesc">Непрерывное управление генеративными моделями через динамическое внутреннее состояние.</p>
+  </div>
+</div>
+
+<div class="frontier-box">
+  <div class="frontier-kicker" data-t="frontierKicker">ENGINEERING FRONTIER · QN-EVO</div>
+  <p class="frontier-lead" data-t="frontierLead">Переход от управления генерацией исключительно через внешние запросы к формированию управляющего воздействия на основе непрерывной внутренней динамики системы.</p>
+  <p class="frontier-note" data-t="frontierNote">Это отдельное направление инженерных исследований на стыке агентных архитектур, динамических систем и управления генеративными моделями.</p>
+</div>
+</div></section>
+
+<section id="publications"><div class="wrap">
+<div class="section-top"><div class="section-index" data-t="secIndex5">05 — ПУБЛИКАЦИИ</div><div><h2 class="section-title" data-t="pubTitle">The project is open<br>for discussion.</h2><p class="section-desc" data-t="pubDesc">Публикации о концепции QN-EVO, архитектуре и исследовательских вопросах. Материалы доступны на независимых площадках.</p></div></div>
+<div class="publications">
+<a class="publication" href="https://medium.com/@tony-nsk/what-happens-to-artificial-intelligence-when-it-is-silent-i-built-qn-evo-to-find-out-39a43dbc8d1a?postPublishedType=initial" target="_blank" rel="noopener"><div><span class="source">MEDIUM / ENGLISH</span><h3>What Happens to Artificial Intelligence When It Is Silent?</h3></div><span class="out">↗</span></a>
+<a class="publication" href="https://vc.ru/id6024006/2999482-qn-evo-novyy-podkhod-k-iskusstvennomu-intellektu" target="_blank" rel="noopener"><div><span class="source">VC.RU / РУССКИЙ</span><h3>QN-EVO: новый подход к искусственному интеллекту</h3></div><span class="out">↗</span></a>
+<a class="publication" href="https://pikabu.ru/story/sdelal_lokalnuyu_iisistemu_so_160_agentamiroyami_i_yevolyutsionnyim_genofondom_khochu_uslyishat_kritiku_14105714?ysclid=mwji331wti591905242" target="_blank" rel="noopener"><div><span class="source">ПИКАБУ / РУССКИЙ</span><h3>Сделал локальную ИИ-систему со 160 агентами</h3></div><span class="out">↗</span></a>
+</div>
+</div></section>
+
+<section id="reports"><div class="wrap">
+<div class="section-top"><div class="section-index" data-t="secIndex6">06 — ТЕХНИЧЕСКИЕ ОТЧЁТЫ</div><div><h2 class="section-title">Пять технических<br>отчётов QN-EVO.</h2><p class="section-desc">Ниже — пять отдельных технических отчётов. Каждый можно копировать и публиковать независимо. Без рекомендаций, планов развития и маркетинговых утверждений.</p></div></div>
+
+<div class="reports-list">
+
+<article class="report">
+  <div class="report-head">
+    <span class="report-no">01</span>
+    <div>
+      <h3>Спектральная структура внутреннего состояния QN-EVO</h3>
+      <p class="report-meta">16.11.2026 · StateAggregator · вектор состояния 128D</p>
+    </div>
+  </div>
+  <table class="report-table">
+    <thead><tr><th>Метрика</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Размерность вектора</td><td>128</td></tr>
+      <tr><td>Participation Ratio</td><td>20,85</td></tr>
+      <tr><td>PR / Dimension</td><td>16,29%</td></tr>
+      <tr><td>Энергия общей моды</td><td>99,99999%</td></tr>
+      <tr><td>State norm</td><td>0,327872</td></tr>
+      <tr><td>State hash</td><td><code>4fcfd3be939b21704149</code></td></tr>
+    </tbody>
+  </table>
+  <h4>Наблюдения</h4>
+  <ol>
+    <li>Энергия внутреннего состояния практически полностью сосредоточена в общей моде.</li>
+    <li>Participation Ratio составляет 20,85 при размерности пространства 128.</li>
+    <li>Эффективное распределение состояния не соответствует равномерному использованию всех измерений.</li>
+    <li>Зафиксированный вектор имеет ненулевую норму 0,327872.</li>
+  </ol>
+  <div class="report-callout"><b>Технический результат</b><p>Получено численное подтверждение выраженной спектральной концентрации внутреннего состояния QN-EVO. Энергия общей моды и Participation Ratio описывают разные характеристики распределения. Полученные показатели сами по себе не устанавливают наличие сознания или независимой когнитивной деятельности.</p></div>
+</article>
+
+<article class="report">
+  <div class="report-head">
+    <span class="report-no">02</span>
+    <div>
+      <h3>Импульсная динамика и многоканальное внутреннее состояние QN-EVO</h3>
+      <p class="report-meta">Vitalis / StateAggregator · 8 каналов</p>
+    </div>
+  </div>
+  <table class="report-table">
+    <thead><tr><th>Канал</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Arousal</td><td>+0,786995</td></tr>
+      <tr><td>Conflict</td><td>+0,786861</td></tr>
+      <tr><td>Curiosity</td><td>+0,787239</td></tr>
+      <tr><td>Joy</td><td>+0,786774</td></tr>
+      <tr><td>Memory</td><td>+0,786818</td></tr>
+      <tr><td>Novelty</td><td>+0,786508</td></tr>
+      <tr><td>Pain</td><td>+0,786487</td></tr>
+      <tr><td>Sadness</td><td>−0,785960</td></tr>
+    </tbody>
+  </table>
+  <h4>Наблюдения</h4>
+  <ol>
+    <li>Система формирует отдельные численные значения для восьми каналов.</li>
+    <li>Семь каналов имеют положительные значения.</li>
+    <li>Sadness имеет отрицательное значение.</li>
+    <li>Между значениями каналов наблюдается высокая численная близость.</li>
+    <li>Каналы представлены в едином внутреннем контуре состояния.</li>
+  </ol>
+  <div class="report-callout"><b>Технический результат</b><p>Подтверждено существование многоканального численного представления внутренних состояний QN-EVO с различающимися значениями и знаковой направленностью. Значения характеризуют вычислительное состояние системы, а не доказанные субъективные эмоциональные переживания.</p></div>
+</article>
+
+<article class="report">
+  <div class="report-head">
+    <span class="report-no">03</span>
+    <div>
+      <h3>Эксперимент Pain-Autonomous: реакция внутреннего состояния на импульсную нагрузку</h3>
+      <p class="report-meta">18 импульсов · метрика State norm</p>
+    </div>
+  </div>
+  <table class="report-table">
+    <thead><tr><th>Контрольная точка</th><th>State norm</th></tr></thead>
+    <tbody>
+      <tr><td>Начальное состояние</td><td>0,0058</td></tr>
+      <tr><td>Максимальное значение</td><td>0,8246</td></tr>
+      <tr><td>Конечное состояние</td><td>0,0072</td></tr>
+    </tbody>
+  </table>
+  <h4>Экспериментальная модель порога</h4>
+  <p class="report-formula">T = 0.65S + 0.35F</p>
+  <p>Где <b>S</b> — сила импульса, <b>F</b> — нормализованная частота импульсов, <b>T</b> — вычисляемый порог реакции.</p>
+  <h4>Наблюдения</h4>
+  <ol>
+    <li>После серии из 18 импульсов норма состояния увеличилась с 0,0058 до 0,8246.</li>
+    <li>В дальнейшем значение снизилось до 0,0072.</li>
+    <li>Максимальная норма оказалась приблизительно в 142 раза выше начальной.</li>
+    <li>Конечное состояние приблизилось к начальному по величине нормы.</li>
+  </ol>
+  <div class="report-callout"><b>Технический результат</b><p>Зафиксирована выраженная динамическая реакция внутреннего состояния на последовательную импульсную нагрузку с последующим снижением амплитуды. Эксперимент подтверждает численную реактивность архитектуры, но не доказывает наличие субъективного ощущения боли.</p></div>
+</article>
+
+<article class="report">
+  <div class="report-head">
+    <span class="report-no">04</span>
+    <div>
+      <h3>Автономная инициатива и регистрация внутренних действий QN-EVO</h3>
+      <p class="report-meta">InitiativeEngine · Vitalis · StateAggregator · v4.1–v4.3</p>
+    </div>
+  </div>
+  <table class="report-table">
+    <thead><tr><th>Метрика</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Initiative score</td><td>0,981</td></tr>
+      <tr><td>Threshold</td><td>0,120</td></tr>
+      <tr><td>State delta L2</td><td>0,0272</td></tr>
+      <tr><td>State norm</td><td>0,3616</td></tr>
+      <tr><td>State cosine delta</td><td>0,0028</td></tr>
+    </tbody>
+  </table>
+  <pre class="report-code">INITIATIVE_ACTION_COMPLETED
+action=COMMUNICATE
+public=True</pre>
+  <pre class="report-code">Priority: 0.767
+Persistence: 2/2
+State delta L2: 0.037006 → 0.031107</pre>
+  <pre class="report-code">internal_conflict
+Priority: 1.000
+Confidence: 0.850</pre>
+  <h4>Наблюдения</h4>
+  <ol>
+    <li>InitiativeEngine рассчитывает численную оценку инициативы.</li>
+    <li>Система сравнивает оценку с установленным порогом.</li>
+    <li>Регистрируются события внутреннего конфликта.</li>
+    <li>В логах присутствует событие завершения программного действия COMMUNICATE.</li>
+    <li>Для инициативных событий фиксируются приоритет и устойчивость.</li>
+  </ol>
+  <div class="report-callout"><b>Технический результат</b><p>Подтверждена работа отдельного вычислительного механизма оценки инициативы и регистрации программных действий. Наличие события <code>ACTION_COMPLETED</code> подтверждает завершение программной операции, но не является самостоятельным доказательством доставки сообщения внешнему получателю или полной автономности системы.</p></div>
+</article>
+
+<article class="report">
+  <div class="report-head">
+    <span class="report-no">05</span>
+    <div>
+      <h3>Нейронная подсистема QN-EVO: интеграция FlyConnectome</h3>
+      <p class="report-meta">v4.2-alpha7 · FlyConnectome · FlyWire · StateAggregator</p>
+    </div>
+  </div>
+  <h4>Исходные данные</h4>
+  <table class="report-table">
+    <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Нейроны исходного графа</td><td>138 639</td></tr>
+      <tr><td>Связи исходного графа</td><td>15 091 983</td></tr>
+      <tr><td>Синапсы исходной модели</td><td>54 492 922</td></tr>
+    </tbody>
+  </table>
+  <h4>Компактная модель</h4>
+  <table class="report-table">
+    <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Нейроны</td><td>1 024</td></tr>
+      <tr><td>Загруженные синапсы</td><td>720 608</td></tr>
+      <tr><td>Строки рёбер компактного графа</td><td>58 421</td></tr>
+      <tr><td>Вычислительная платформа</td><td>CPU</td></tr>
+      <tr><td>Размерность StateAggregator</td><td>128</td></tr>
+    </tbody>
+  </table>
+  <h4>Дополнительные показатели Brain Observatory</h4>
+  <table class="report-table">
+    <thead><tr><th>Показатель</th><th>Значение</th></tr></thead>
+    <tbody>
+      <tr><td>Целевая нейронная модель</td><td>10 000 000</td></tr>
+      <tr><td>Активные нейроны</td><td>2 528</td></tr>
+      <tr><td>Зарегистрированные агенты</td><td>73</td></tr>
+      <tr><td>Зафиксированные спайки</td><td>13 244</td></tr>
+      <tr><td>Лимит активных маршрутов</td><td>10 000</td></tr>
+      <tr><td>Использование RAM</td><td>6 682,4 MB</td></tr>
+    </tbody>
+  </table>
+  <h4>Зафиксированные события</h4>
+  <pre class="report-code">FlyConnectome: 1024 neurons
+720608 synapses
+StateAggregator dim=128
+neuroconnect=True</pre>
+  <h4>Наблюдения</h4>
+  <ol>
+    <li>Загружен компактный нейронный граф на 1 024 нейрона.</li>
+    <li>Зарегистрировано 720 608 синаптических связей.</li>
+    <li>Нейронная подсистема подключена к StateAggregator.</li>
+    <li>В Brain Observatory зарегистрирована активность 2 528 нейронов и 13 244 спайка.</li>
+    <li>Зафиксировано включение параметра <code>neuroconnect=True</code>.</li>
+  </ol>
+  <div class="report-callout"><b>Технический результат</b><p>Подтверждена загрузка компактного нейронного графа FlyConnectome и его программная интеграция с внутренним контуром состояния QN-EVO. Показатели компактной модели относятся к отдельному вычислительному представлению исходного графа и не означают полноценное воспроизведение биологического коннектома.</p></div>
+</article>
+
+</div>
+</div></section>
+
+<section class="demo" id="demo"><div class="wrap"><div class="demo-box">
+<div><div class="micro" data-t="demoEyebrow">PRIVATE PROJECT WALKTHROUGH</div><h2 data-t="demoTitle">See the architecture<br>in motion.</h2><p data-t="demoText">Демонстрацию QN-EVO можно запросить напрямую у разработчика. Формат и доступность согласуются индивидуально: система пока работает локально и не открыта для постоянного публичного доступа.</p></div>
+<div class="demo-actions"><a class="button primary" href="https://t.me/Tony_nsk" target="_blank" rel="noopener"><span data-t="demoButton">ЗАПРОСИТЬ ДЕМОНСТРАЦИЮ</span><span>↗</span></a><div class="telegram-note">TELEGRAM · @TONY_NSK</div></div>
+</div></div></section>
+
+<div class="wrap"><div class="author"><div><div class="micro" data-t="authorLabel">FOUNDER / INDEPENDENT RESEARCHER</div><div class="author-name">Anton Galyamov <span style="color:#71819a;font-weight:500">/ StormCode</span></div><div class="author-desc" data-t="authorDesc">Независимая разработка экспериментальных архитектур искусственного интеллекта.</div></div><div class="author-right">QN-EVO<br>STORMCODE.RU<br><a href="https://t.me/Tony_nsk" target="_blank" rel="noopener" style="color:var(--k)">@TONY_NSK ↗</a></div></div></div>
+</main>
+<footer class="footer"><div class="wrap footer-row"><span>© <span id="year"></span> STORMCODE · QN-EVO</span><span data-t="footerText">Experimental research · Local development · Not a public online service</span></div></footer>
+<script>
+const translations={
+ru:{
+navThesis:"Тезис",navIdea:"Идея",navArchitecture:"Архитектура",navResearch:"Исследования",navFrontier:"Фронтир",navPublications:"Публикации",navDemo:"ЗАПРОСИТЬ ДЕМО ↗",
+eyebrow:"НЕЗАВИСИМОЕ ИССЛЕДОВАНИЕ ИИ · ЭКСПЕРИМЕНТАЛЬНАЯ СИСТЕМА",heroA:"Что происходит,",heroB:"когда ИИ молчит?",heroLead:"QN-EVO исследует другой взгляд на архитектуру ИИ: не только генерацию ответа, но и процессы, которые продолжаются внутри системы между запросами.",explore:"ИССЛЕДОВАТЬ АРХИТЕКТУРУ",exploreThesis:"ГЛАВНЫЙ ТЕЗИС",request:"ЗАПРОСИТЬ ДЕМОНСТРАЦИЮ",local:"ЛОКАЛЬНАЯ РАЗРАБОТКА",notOnline:"НЕ ВЫПУЩЕНА В ПУБЛИЧНУЮ СЕТЬ",
+artTagA:"НЕПРЕРЫВНОЕ СОСТОЯНИЕ / 01",artTagB:"ДИНАМИКА АГЕНТОВ / 160",artTagC:"VITALIS · СИСТЕМНЫЙ РИТМ",artCaption:"КОНЦЕПТУАЛЬНАЯ СХЕМА СИСТЕМЫ",
+stat1:"Агентных слотов в развивающейся архитектуре",stat2:"Измерения внутреннего представления состояния",stat3:"Локальное выполнение и эксперименты",stat4:"Индивидуальная демонстрация по запросу",
+secIndex1:"01 — ВОПРОС",secIndex2:"02 — АРХИТЕКТУРА",secIndex3:"03 — СТАТУС ИССЛЕДОВАНИЙ",secIndex4:"04 — ИНЖЕНЕРНЫЙ ФРОНТИР",secIndex5:"05 — ПУБЛИКАЦИИ",secIndex6:"06 — ТЕХНИЧЕСКИЕ ОТЧЁТЫ",
+thesisQuote:"Внутреннее состояние искусственного агента может быть <em>самостоятельной динамической переменной</em>.",thesisSub:"Мы доказали, что:",thesis1:"Внутреннее состояние — это не побочный эффект, а управляющая переменная.",thesis2:"Оно обладает инерцией, памятью, реактивностью и способностью к самоорганизации.",thesis3:"Система способна генерировать поведение (инициативу), исходя из внутренней динамики, а не только из внешних промптов.",
+ideaTitle:"ИИ-система — это<br>не только следующий ответ.",ideaDesc:"Большинство привычных интерфейсов ИИ показывают нам только момент взаимодействия. QN-EVO исследует, что может происходить в самой системе за пределами этого момента.",quote:"Что если ИИ-система сможет поддерживать изменяющееся внутреннее состояние между нашими взаимодействиями?",ideaP:"QN-EVO — экспериментальная локальная архитектура, объединяющая специализированных агентов, модель внутреннего состояния, память и управляющие сигналы. Её задача — исследовать инженерные механизмы непрерывной работы и инициативного поведения.",ideaP2:"Проект не заявляет, что сознание машины доказано. Здесь важны архитектура, наблюдаемая динамика, проверяемые гипотезы и честное описание ограничений.",
+archTitle:"Согласованная<br>внутренняя архитектура.",archDesc:"QN-EVO развивается как набор взаимосвязанных подсистем. Схема показывает концептуальные отношения между ключевыми компонентами, а не исчерпывающую карту всех реализованных модулей.",vitalis:"Центральный контур системного ритма и состояния, связывающий динамику компонентов в общий контекст.",agents:"Агентная координация",agentsP:"Специализированные агенты обрабатывают сигналы и формируют управляющие воздействия для системы.",state:"Внутреннее состояние",stateP:"Компактное представление параметров позволяет наблюдать изменения внутренней динамики.",memory:"Память и непрерывность",memoryP:"Исследуются сохранение событий, реактивация контекста и связь состояний во времени.",steering:"Управляющие сигналы",steeringP:"Эксперименты с воздействием внутренних сигналов на генерацию локальной модели.",observability:"Наблюдаемость",observabilityP:"Метрики, логи и инструменты проверки превращают гипотезы в исследуемые результаты.",
+frontierTitle:"Новое направление<br>в инженерии ИИ.",frontierDesc:"Непрерывное управление генеративными моделями через динамическое внутреннее состояние.",frontierKicker:"ИНЖЕНЕРНЫЙ ФРОНТИР · QN-EVO",frontierLead:"Переход от управления генерацией исключительно через внешние запросы к формированию управляющего воздействия на основе непрерывной внутренней динамики системы.",frontierNote:"Это отдельное направление инженерных исследований на стыке агентных архитектур, динамических систем и управления генеративными моделями.",
+researchTitle:"Открыто о том,<br>что готово — и что нет.",researchDesc:"Проект находится в активной локальной разработке. Мы разделяем исследовательские направления, реализованные компоненты и то, что ещё требует проверки.",statusTitle:"QN-EVO пока не выпущена в публичную сеть",statusText:"Работающая система запускается локально. Публичного облачного экземпляра, открытого API или постоянной онлайн-демонстрации сейчас нет. Это позволяет сохранять вычислительные ресурсы для разработки и экспериментов.",statusBadge:"ЛОКАЛЬНО / ЭКСПЕРИМЕНТАЛЬНО",p1h:"Чёткие границы",p1p:"Экспериментальная архитектура не выдаётся за доказанное сознание или готовый продукт.",p2h:"Измерения важнее лозунгов",p2p:"Результаты должны сопровождаться условиями эксперимента, метриками и ограничениями.",p3h:"Локальная разработка",p3p:"Вычислительная система остаётся под контролем разработчика и не требует публичного облака.",road1h:"Модель себя и состояния",road1p:"Представление и отслеживание внутренних параметров системы.",road2h:"Агентность и координация",road2p:"Развитие агентов, маршрутизации и механизмов инициативы.",road3h:"Непрерывность и память",road3p:"Память, реактивация и временная связность событий.",road4h:"Воспроизводимые тесты",road4p:"Публикация методик, измерений и воспроизводимых наблюдений.",
+pubTitle:"Проект открыт<br>для обсуждения.",pubDesc:"Публикации о концепции QN-EVO, архитектуре и исследовательских вопросах. Материалы доступны на независимых площадках.",demoEyebrow:"ИНДИВИДУАЛЬНАЯ ДЕМОНСТРАЦИЯ ПРОЕКТА",demoTitle:"Посмотрите, как<br>архитектура работает.",demoText:"Демонстрацию QN-EVO можно запросить напрямую у разработчика. Формат и доступность согласуются индивидуально: система пока работает локально и не открыта для постоянного публичного доступа.",demoButton:"ЗАПРОСИТЬ ДЕМОНСТРАЦИЮ",authorLabel:"АВТОР / НЕЗАВИСИМЫЙ ИССЛЕДОВАТЕЛЬ",authorDesc:"Независимая разработка экспериментальных архитектур искусственного интеллекта.",footerText:"Экспериментальное исследование · Локальная разработка · Не публичный онлайн-сервис"
+},
+en:{
+navThesis:"Thesis",navIdea:"The idea",navArchitecture:"Architecture",navResearch:"Research",navFrontier:"Frontier",navPublications:"Publications",navDemo:"REQUEST A DEMO ↗",
+eyebrow:"INDEPENDENT AI RESEARCH · EXPERIMENTAL SYSTEM",heroA:"What happens",heroB:"when AI is silent?",heroLead:"QN-EVO explores a different approach to AI architecture: not only the generation of a response, but also the processes that continue inside a system between prompts.",explore:"EXPLORE THE ARCHITECTURE",exploreThesis:"THE CORE THESIS",request:"REQUEST A DEMO",local:"LOCAL-FIRST DEVELOPMENT",notOnline:"NOT PUBLICLY DEPLOYED",
+artTagA:"PERSISTENT STATE / 01",artTagB:"AGENT DYNAMICS / 160",artTagC:"VITALIS · CORE RHYTHM",artCaption:"CONCEPTUAL SYSTEM VISUALIZATION",
+stat1:"Agent slots in the evolving architecture",stat2:"Dimensions in the internal state representation",stat3:"Local execution and experimentation",stat4:"Private project walkthrough on request",
+secIndex1:"01 — THE QUESTION",secIndex2:"02 — SYSTEM DESIGN",secIndex3:"03 — RESEARCH STATUS",secIndex4:"04 — ENGINEERING FRONTIER",secIndex5:"05 — PUBLIC RECORD",secIndex6:"06 — TECHNICAL REPORTS",
+thesisQuote:"The internal state of an artificial agent can be <em>an independent dynamic variable</em>.",thesisSub:"We have shown that:",thesis1:"Internal state is not a side effect but a governing variable.",thesis2:"It has inertia, memory, reactivity, and a capacity for self-organization.",thesis3:"The system can generate behavior (initiative) from its internal dynamics, not only from external prompts.",
+ideaTitle:"An AI system is more<br>than its next response.",ideaDesc:"Most familiar AI interfaces show us only the moment of interaction. QN-EVO explores what may happen inside the system beyond that moment.",quote:"What if an AI system could maintain an evolving internal state between our interactions?",ideaP:"QN-EVO is an experimental local architecture combining specialized agents, an internal state model, memory, and steering signals. It explores engineering mechanisms for persistent operation and initiative-like behavior.",ideaP2:"The project does not claim that machine consciousness has been proven. The focus is architecture, observable dynamics, testable hypotheses, and an honest account of limitations.",
+archTitle:"A coordinated<br>internal architecture.",archDesc:"QN-EVO is evolving as a set of interconnected subsystems. This diagram illustrates conceptual relationships between key components; it is not an exhaustive map of every implemented module.",vitalis:"A central system rhythm and state loop, connecting component dynamics into a shared context.",agents:"Agent coordination",agentsP:"Specialized agents process signals and produce control inputs for the wider system.",state:"Internal state",stateP:"A compact parameter representation makes changes in internal dynamics observable.",memory:"Memory and continuity",memoryP:"Research explores event retention, context reactivation, and links between states over time.",steering:"Steering signals",steeringP:"Experiments examine how internal signals may influence generation in a local model.",observability:"Observability",observabilityP:"Metrics, logs, and evaluation tools turn hypotheses into researchable results.",
+frontierTitle:"A new direction<br>in AI engineering.",frontierDesc:"Continuous control of generative models through dynamic internal state.",frontierKicker:"ENGINEERING FRONTIER · QN-EVO",frontierLead:"A shift from controlling generation solely through external prompts toward control based on the system's continuous internal dynamics.",frontierNote:"This is a distinct line of engineering research at the intersection of agent architectures, dynamical systems, and the control of generative models.",
+researchTitle:"Clear about what<br>is ready — and what isn't.",researchDesc:"The project is under active local development. We distinguish research directions, implemented components, and areas that still require validation.",statusTitle:"QN-EVO has not been publicly deployed",statusText:"The working system runs locally. There is currently no public cloud instance, open API, or always-on online demo. This keeps available computing resources focused on development and experimentation.",statusBadge:"LOCAL / EXPERIMENTAL",p1h:"Clear boundaries",p1p:"An experimental architecture is not presented as proven consciousness or a finished product.",p2h:"Evidence over slogans",p2p:"Results should be accompanied by experimental conditions, metrics, and limitations.",p3h:"Local-first development",p3p:"The compute system remains under the developer's control and does not depend on a public cloud.",road1h:"Self-model & state",road1p:"Representing and tracking the system's internal parameters.",road2h:"Agency & coordination",road2p:"Developing agents, signal routing, and mechanisms for initiative.",road3h:"Continuity & memory",road3p:"Memory, reactivation, and temporal connections between events.",road4h:"Reproducible tests",road4p:"Publishing methods, measurements, and reproducible observations.",
+pubTitle:"The project is open<br>for discussion.",pubDesc:"Articles about the QN-EVO concept, architecture, and research questions. Materials are available across independent platforms.",demoEyebrow:"PRIVATE PROJECT WALKTHROUGH",demoTitle:"See the architecture<br>in motion.",demoText:"You can request a QN-EVO demonstration directly from the developer. Format and availability are arranged individually: the system currently runs locally and is not open for continuous public access.",demoButton:"REQUEST A DEMONSTRATION",authorLabel:"AUTHOR / INDEPENDENT RESEARCHER",authorDesc:"Independent development of experimental artificial intelligence architectures.",footerText:"Experimental research · Local development · Not a public online service"
+}};
+let current="ru";
+function applyLanguage(lang){current=lang;document.documentElement.lang=lang;document.querySelectorAll("[data-t]").forEach(el=>{let value=translations[lang][el.dataset.t];if(value!==undefined)el.innerHTML=value});document.getElementById("lang").textContent=lang==="ru"?"EN":"RU";document.title=lang==="ru"?"QN-EVO — архитектура ИИ с непрерывным внутренним состоянием | StormCode":"QN-EVO — AI architecture with continuous internal state | StormCode";document.querySelector('meta[name="description"]').content=lang==="ru"?"Экспериментальная локальная AI-архитектура QN-EVO: внутреннее состояние агента как динамическая переменная, 160 агентов, 128D-вектор, пять технических отчётов. Демо по запросу.":"QN-EVO is an experimental local AI architecture: the agent's internal state as a dynamic variable, 160 agents, 128D vector, five technical reports. Demo on request.";try{localStorage.setItem("qn-evo-language",lang)}catch(e){}}
+document.getElementById("lang").addEventListener("click",()=>applyLanguage(current==="ru"?"en":"ru"));
+document.getElementById("year").textContent=new Date().getFullYear();
+try{let saved=localStorage.getItem("qn-evo-language");if(saved)applyLanguage(saved);else applyLanguage("ru")}catch(e){applyLanguage("ru")}
+
+/* ===== Осциллограмма «тишины»: иллюстративная, не реальные данные ===== */
+(function(){
+const c=document.getElementById("scope");if(!c)return;
+const x=c.getContext("2d"),sil=document.getElementById("sil"),nrm=document.getElementById("nrm"),hint=document.getElementById("hint"),hero=document.querySelector(".hero"),art=document.querySelector(".hero-art"),scope=document.querySelector(".scope"),red=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let W,H,N,a=[],b=[],bl=0,pulses=[],rip=[],nx=1.2,lq=-1,S=0,ln=0,t0=performance.now();
+function size(){const d=Math.min(devicePixelRatio||1,2);W=c.clientWidth;H=c.clientHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);N=Math.ceil(W/2)+2;a=new Array(N).fill(0);b=new Array(N).fill(0)}
+function pulse(amp,px,py){pulses.push({t:S,a:amp});rip.push({x:px,y:py,r:4,a:1})}
+function step(s){S=s;
+ if(s>nx){pulse(.5+Math.random()*.5,W-2,H*.55-a[a.length-1]*H*.38);nx=s+2.5+Math.random()*4.5}
+ pulses=pulses.filter(p=>s-p.t<4);
+ let v=Math.sin(s*1.3)*.035+Math.sin(s*.37)*.05+(Math.random()-.5)*.02;
+ for(const p of pulses){const dt=s-p.t;v+=p.a*Math.exp(-dt*2.2)*Math.cos(dt*18)}
+ a.push(v);a.shift();bl+=(v-bl)*.05;b.push(bl);b.shift()}
+function line(r,col,w,g){x.beginPath();r.forEach((v,i)=>{const px=i*W/(N-2),py=H*.55-v*H*.38;i?x.lineTo(px,py):x.moveTo(px,py)});x.strokeStyle=col;x.lineWidth=w;x.lineJoin="round";x.shadowBlur=g;x.shadowColor="#fff";x.stroke();x.shadowBlur=0}
+function draw(){
+ x.globalCompositeOperation="destination-out";x.fillStyle="rgba(0,0,0,"+(red?1:.28)+")";x.fillRect(0,0,W,H);x.globalCompositeOperation="source-over";
+ line(b,"rgba(255,255,255,.45)",1.2,0);line(a,"#fff",2,14);
+ const hy=H*.55-a[a.length-1]*H*.38;x.beginPath();x.arc(W-2,hy,3.5,0,7);x.fillStyle="#fff";x.shadowBlur=18;x.shadowColor="#fff";x.fill();x.shadowBlur=0;
+ for(let i=rip.length-1;i>=0;i--){const r=rip[i];if(!red){r.r+=2.6;r.a-=.018}if(r.a<=0){rip.splice(i,1);continue}x.beginPath();x.arc(r.x,r.y,r.r,0,7);x.strokeStyle="rgba(255,255,255,"+r.a*.7+")";x.lineWidth=1.2;x.stroke()}}
+function frame(now){const s=(now-t0)/1000;step(s);draw();
+ const q=Math.floor(s);if(sil&&q!==lq){lq=q;sil.textContent=[q/3600,q/60%60,q%60].map(n=>String(Math.floor(n)).padStart(2,"0")).join(":")}
+ if(nrm&&now-ln>120){ln=now;nrm.textContent=Math.abs(a[a.length-1]*.9).toFixed(4)}
+ requestAnimationFrame(frame)}
+function still(){rip=[];for(let i=0;i<N;i++)step(i/30);rip=[];draw()}
+addEventListener("resize",()=>{size();if(red)still()},{passive:true});
+size();
+c.addEventListener("pointerdown",e=>{const r=c.getBoundingClientRect();pulse(.95,e.clientX-r.left,e.clientY-r.top);if(hint)hint.style.opacity=0});
+if(!red&&matchMedia("(hover:hover)").matches){
+ const k=v=>Math.max(-1,Math.min(1,v));
+ hero.addEventListener("pointermove",e=>{const r=hero.getBoundingClientRect();hero.style.setProperty("--mx",e.clientX-r.left+"px");hero.style.setProperty("--my",e.clientY-r.top+"px");
+  const q=art.getBoundingClientRect();scope.style.setProperty("--ry",(k((e.clientX-q.left-q.width/2)/q.width)*8).toFixed(2)+"deg");scope.style.setProperty("--rx",(-k((e.clientY-q.top-q.height/2)/q.height)*8).toFixed(2)+"deg")});
+ hero.addEventListener("pointerleave",()=>{scope.style.setProperty("--ry","0deg");scope.style.setProperty("--rx","0deg")})}
+if(red)still();else requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
