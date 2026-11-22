@@ -1,5 +1,5 @@
-# robots.txt for https://stormcode.ru/
-# QN-EVO / StormCode
+# robots.txt for https://qnevo.ru/
+# QN-EVO — experimental local AI architecture
 
 User-agent: *
 Allow: /
@@ -35,4 +35,4 @@ Disallow: /
 User-agent: DotBot
 Crawl-delay: 15
 
-Sitemap: https://stormcode.ru/sitemap.xml
+Sitemap: https://qnevo.ru/sitemap.xml
